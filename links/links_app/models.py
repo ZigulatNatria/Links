@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -26,3 +27,8 @@ class Bookmark(models.Model):
     date_change = models.DateTimeField(verbose_name='время изменения', auto_now=True)
     links_collections = models.ManyToManyField(Collections, verbose_name='коллекции', blank=True)
 
+
+class CustomUser(AbstractUser):
+    username = models.EmailField('email address', unique=True)
+
+    REQUIRED_FIELDS = ["password"]

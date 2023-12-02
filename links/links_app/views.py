@@ -3,23 +3,37 @@ import requests
 from bs4 import BeautifulSoup as bs
 import pandas as pd
 from rest_framework import viewsets, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, schema
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.schemas import AutoSchema
 
 from .models import Bookmark, Collections
 from .serializers import BookmarkSerializer, LinkSerializer, CollectionsSerializer
+from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
+from drf_spectacular.types import OpenApiTypes
 
 
 class BookmarkSerializerAPI(viewsets.ModelViewSet):
     queryset = Bookmark.objects.all()
     serializer_class = BookmarkSerializer
+    permission_classes = (IsAuthenticated,)
 
 
+@extend_schema(
+    parameters=[OpenApiParameter(
+        name='link',
+        type={'type': 'string'},
+        location=OpenApiParameter.QUERY,
+        required=False,
+        style='form',
+        explode=False,
+    )],
+    request=OpenApiTypes.STR, responses=OpenApiTypes.STR
+)
 @api_view(['POST',])
+@permission_classes([IsAuthenticated])
 def snippet_list(request):
-    """
-    List all code snippets, or create a new snippet.
-    """
     if request.method == 'POST':
         serializer = LinkSerializer(data=request.data)
         if serializer.is_valid():
@@ -53,3 +67,4 @@ def snippet_list(request):
 class CollectionsSerializerAPI(viewsets.ModelViewSet):
     queryset = Collections.objects.all()
     serializer_class = CollectionsSerializer
+    permission_classes = (IsAuthenticated,)
