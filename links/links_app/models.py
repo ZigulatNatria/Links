@@ -17,12 +17,12 @@ class Bookmark(models.Model):
         ('video', 'video'),
     ]
 
-    name = models.CharField(verbose_name='название закладки', max_length=200)
-    descriptions = models.TextField(verbose_name='описание')
-    link = models.CharField(verbose_name='ссылка', max_length=500)
+    name = models.CharField(verbose_name='название закладки', max_length=200, null=True)
+    descriptions = models.TextField(verbose_name='описание', null=True)
+    link = models.URLField(verbose_name='ссылка', max_length=500)
     link_type = models.CharField(verbose_name='тип ссылки', max_length=50, default="website")
-    preview = models.ImageField(verbose_name='превью')
+    preview = models.URLField(verbose_name='превью', max_length=500, null=True)
     date_created = models.DateTimeField(verbose_name='время создания', auto_now_add=True)
     date_change = models.DateTimeField(verbose_name='время изменения', auto_now=True)
-    links_collections = models.ManyToManyField(Collections, verbose_name='коллекции')
+    links_collections = models.ManyToManyField(Collections, verbose_name='коллекции', blank=True)
 

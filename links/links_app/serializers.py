@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Bookmark
+from .models import Bookmark, Collections
 
 
 class BookmarkSerializer(serializers.ModelSerializer):
@@ -15,6 +15,19 @@ class BookmarkSerializer(serializers.ModelSerializer):
             'date_created',
             'date_change',
             'links_collections',
+        )
+
+
+class CollectionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Collections
+        fields = (
+            'id',
+            'name',
+            'description',
+            'date_created',
+            'date_change',
         )
 
 

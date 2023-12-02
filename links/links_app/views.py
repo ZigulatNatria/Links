@@ -6,36 +6,8 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import Bookmark
-from .serializers import BookmarkSerializer, LinkSerializer
-
-
-def index(request):
-    URL_TEMPLATE = "https://www.youtube.com/watch?app=desktop&v=vtizH9w0V7c"
-    r = requests.get(URL_TEMPLATE)
-    print(r.status_code)
-    # print(r.text)
-
-    soup = bs(r.text, "html.parser")
-    # vacancies_names = soup.find_all('h2', class_='add-bottom-sm')
-    meta_tags = soup.find_all('meta', property=['og:title', 'og:image', 'og:type', 'og:description'])
-    values = []
-    for m_t in meta_tags:
-        values.append(m_t['content'])
-
-    keys = ["title", "image", "descriptions", "type"]
-
-    dictionary = dict(zip(keys, values))
-    print(dictionary)
-
-    my_link = Bookmark.objects.create(
-                        name=dictionary['title'],
-                        descriptions=dictionary['descriptions'],
-                        link=URL_TEMPLATE,
-                        preview=dictionary['image']
-                    )
-    my_link.save()
-    return render(request, 'pdf/report.html')
+from .models import Bookmark, Collections
+from .serializers import BookmarkSerializer, LinkSerializer, CollectionsSerializer
 
 
 class BookmarkSerializerAPI(viewsets.ModelViewSet):
@@ -56,6 +28,7 @@ def snippet_list(request):
 
             soup = bs(r.text, "html.parser")
             meta_tags = soup.find_all('meta', property=['og:title', 'og:image', 'og:type', 'og:description'])
+
             values = []
             for m_t in meta_tags:
                 values.append(m_t['content'])
@@ -69,8 +42,14 @@ def snippet_list(request):
                 name=dictionary['title'],
                 descriptions=dictionary['descriptions'],
                 link=request.data['link'],
-                preview=dictionary['image']
+                preview=dictionary['image'],
             )
             my_link.save()
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CollectionsSerializerAPI(viewsets.ModelViewSet):
+    queryset = Collections.objects.all()
+    serializer_class = CollectionsSerializer
