@@ -1,3 +1,5 @@
 /venv/
 /.idea/
 /links/db.sqlite3
+/links/links/base.py
+/links/.env
