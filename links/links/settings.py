@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-prw%r*znkia*gg3p8q0u^vzka7i!-7pzh4iy%*cu+j8z_nbmwh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -78,14 +78,15 @@ WSGI_APPLICATION = 'links.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'HOST': os.getenv('POSTGRES_HOST', 'localhost'),
-        'PORT': os.getenv('POSTGRES_PORT', 5432),
-        'USER': os.getenv('POSTGRES_USER', 'soaqa'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'NAME': os.getenv('POSTGRES_DB', "db01")
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.getenv('POSTGRES_DB', 'posrgres'),
+        'USER': os.getenv('POSTGRES_USER', 'root'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'adminadmin'),
+        'HOST': 'pg',
+        'PORT': '5432',
     }
 }
 
